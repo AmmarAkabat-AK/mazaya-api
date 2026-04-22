@@ -28,7 +28,7 @@
     "@types/express": "^5.0.6",
     "@types/node": "^22.0.0",
     "@types/ssh2": "^1.15.5",
-    "esbuild": "^0.27.3",
+    "esbuild": "0.25.8",
     "esbuild-plugin-pino": "^2.3.3",
     "pino-pretty": "^13.0.0",
     "thread-stream": "3.1.0",
