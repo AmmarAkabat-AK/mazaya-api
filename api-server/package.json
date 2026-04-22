@@ -9,12 +9,11 @@
     "start": "node --enable-source-maps ./dist/index.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
+ {
   "dependencies": {
-    "@workspace/api-zod": "workspace:*",
-    "@workspace/db": "workspace:*",
     "cookie-parser": "^1.4.7",
     "cors": "^2",
-    "drizzle-orm": "catalog:",
+    "drizzle-orm": "^0.36.4",
     "express": "^5",
     "firebase-admin": "^13.8.0",
     "pino": "^9",
@@ -23,7 +22,8 @@
     "routeros-client": "^1.1.2",
     "source-map-support": "^0.5.21",
     "ssh2": "^1.17.0"
-  },
+  }
+}
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
