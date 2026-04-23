@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شبكة مزايا نت — نظام النقاط</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ====== ALERT ====== -->
+<div id="alert"></div>
+
+<!-- ====== HEADER ====== -->
+<div id="appHeader" style="display:none;">
+  <button class="header-icon" onclick="openDrawer()">☰</button>
+  <div class="header-logo">
+    <span>📡</span> شبكة مزايا نت
+  </div>
+  <div class="bell-wrap">
+    <button class="header-icon">🔔</button>
+    <div class="bell-badge">0</div>
+  </div>
+</div>
+
+<!-- ====== DRAWER ====== -->
+<div id="drawerOverlay" onclick="closeDrawer()"></div>
+<div id="drawerPanel">
+  <div class="drawer-header">
+    <div class="drawer-user-name" id="drawerName">—</div>
+    <div class="drawer-user-sub" id="drawerCode">الكود: —</div>
+  </div>
+  <div class="drawer-menu">
+    <button class="drawer-item" onclick="gotoPage('pointsPage'); closeDrawer();">
+      <span class="di">🏠</span> الرئيسية
+    </button>
+    <button class="drawer-item" onclick="gotoPage('rewardsPage'); closeDrawer();">
+      <span class="di">🎁</span> المكافآت
+    </button>
+    <button class="drawer-item" onclick="gotoPage('logsPage'); closeDrawer();">
+      <span class="di">🕐</span> سجل العمليات
+    </button>
+    <button class="drawer-item" onclick="gotoPage('cardsInfoPage'); closeDrawer();">
+      <span class="di">📋</span> معلومات الكروت
+    </button>
+    <button class="drawer-item" onclick="gotoPage('accountPage'); closeDrawer();">
+      <span class="di">👤</span> حسابي
+    </button>
+    <button class="drawer-item" onclick="gotoPage('chargePage'); closeDrawer();">
+      <span class="di">💳</span> شحن كرت
+    </button>
+    <button class="drawer-item" onclick="showGuide(); closeDrawer();">
+      <span class="di">📖</span> دليل الاستخدام
+    </button>
+  </div>
+  <button class="drawer-logout" onclick="logoutUser(); closeDrawer();">
+    ⎋ تسجيل الخروج
+  </button>
+</div>
+
+<!-- ====== APP WRAPPER ====== -->
+<div id="appWrapper">
+
+  <!-- ==============================
+       صفحة تسجيل الدخول
+  ============================== -->
+  <div id="login" class="page auth-page active" style="display:flex">
+    <div class="auth-logo">
+      <div class="logo-circle">📡</div>
+      <h1>شبكة مزايا نت</h1>
+      <p>نظام نقاط الولاء</p>
+    </div>
+    <div class="auth-card">
+      <div class="auth-title">🚀 تسجيل الدخول</div>
+      <input id="customer_id" type="text" placeholder="الكود الخاص بك 🔑">
+      <input id="password" type="password" placeholder="كلمة السر 🔒">
+      <p id="msg"></p>
+      <button class="btn btn-gold" onclick="login()">تسجيل الدخول</button>
+      <div class="divider"><span>أو</span></div>
+      <button class="btn btn-ghost" onclick="gotoPage('recover')">🔑 نسيت الكود؟</button>
+      <button class="btn btn-ghost" onclick="gotoPage('create')">🎫 إنشاء كود جديد</button>
+      <button class="btn btn-ghost" style="border-color:rgba(201,168,71,0.4); color:#e8c96d;" onclick="showGuide()">📖 دليل الاستخدام</button>
+    </div>
+
+    <!-- بطاقة المطوّر -->
+    <div class="dev-card">
+      <div class="dev-title">إعداد وتصميم وتطوير</div>
+      <div class="dev-name">المهندس عمار عقبات</div>
+      <div class="dev-contact">للتواصل اتصل على الأرقام التالية</div>
+      <div class="dev-phones">
+        <span dir="ltr">783580750</span>
+        <span class="dev-sep">/</span>
+        <span dir="ltr">772401402</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       صفحة إنشاء حساب
+  ============================== -->
+  <div id="create" class="page auth-page" style="display:none">
+    <div class="auth-logo">
+      <div class="logo-circle">🎫</div>
+      <h1>حساب جديد</h1>
+      <p>أنشئ كودك واربطه باسمك</p>
+    </div>
+    <div class="auth-card">
+      <div class="auth-title">🎫 إنشاء كود جديد</div>
+      <input id="newName" placeholder="اسمك الكامل 👤">
+      <input id="newPassword" type="password" placeholder="كلمة السر 🔒">
+      <button class="btn btn-gold" onclick="createUser()">✅ إنشاء الكود</button>
+      <p id="createMsg"></p>
+      <p id="newCodeDisplay"></p>
+      <button class="btn btn-ghost" onclick="gotoPage('login')">⬅️ رجوع</button>
+    </div>
+  </div>
+
+  <!-- ==============================
+       صفحة استعادة الكود
+  ============================== -->
+  <div id="recover" class="page auth-page" style="display:none">
+    <div class="auth-logo">
+      <div class="logo-circle">🔑</div>
+      <h1>استعادة الكود</h1>
+      <p>اكتب اسمك وكلمة سرك</p>
+    </div>
+    <div class="auth-card">
+      <div class="auth-title">🔑 استعادة الكود</div>
+      <input id="recoverName" placeholder="اسم المستخدم 👤">
+      <input id="recoverPassword" type="password" placeholder="كلمة السر 🔒">
+      <button class="btn btn-gold" onclick="recoverCode()">🔍 استعادة</button>
+      <p id="recoveredCode"></p>
+      <button class="btn btn-ghost" onclick="gotoPage('login')">⬅ رجوع</button>
+    </div>
+  </div>
+
+  <!-- ==============================
+       الصفحة الرئيسية
+  ============================== -->
+  <div id="pointsPage" class="page" style="display:none">
+
+    <!-- بطاقة النقاط -->
+    <div class="loyalty-card">
+      <div class="lc-top">
+        <div class="lc-member">👤 <span>Premium Member</span></div>
+        <div class="lc-chip"></div>
+      </div>
+      <div class="lc-points-label">رصيد النقاط</div>
+      <div class="lc-points" id="pointsValueMain">0</div>
+      <div class="lc-divider"></div>
+      <div class="lc-bottom">
+        <div class="lc-id">ID: <span id="userId">—</span></div>
+        <div class="lc-name-box">
+          <div class="lc-name" id="name">—</div>
+          <div class="lc-code" id="userCode" onclick="copyCode()">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- حالة السلفة -->
+    <div id="loanStatus" style="display:none;"></div>
+
+    <!-- إدخال الكرت -->
+    <div class="panel">
+      <div class="panel-label">
+        أدخل كود الكرت يدوياً
+        <span class="help-icon" onclick="showHelp('اكتب رقم كرت الإنترنت كاملاً كما هو مكتوب على الكرت، ثم اضغط زر إضافة نقاط.')">?</span>
+      </div>
+      <input id="cardInput" placeholder="مثال: 887545">
+    </div>
+
+    <!-- زر إضافة النقاط -->
+    <button class="btn btn-cream" onclick="addCard()">+ إضافة نقاط</button>
+
+    <!-- زر سلفني -->
+    <button class="btn btn-ghost" onclick="requestLoan()" style="margin-top:4px;">
+      💰 سلفني
+      <span class="help-icon" onclick="event.stopPropagation();showHelp('خدمة السلفة تتيح لك الحصول على كرت إنترنت مجاناً مقدماً عندما يكون رصيدك 30 نقطة أو أكثر. يُخصم الدين من كروتك القادمة.')" style="margin-right:auto;margin-left:0;">?</span>
+    </button>
+
+  </div>
+
+  <!-- ==============================
+       صفحة المكافآت
+  ============================== -->
+  <div id="rewardsPage" class="page" style="display:none">
+    <div class="page-header">
+      <div class="page-title">🎁 المكافآت المتاحة</div>
+      <div class="page-subtitle">استبدل نقاطك بمكافآت قيمة</div>
+    </div>
+
+    <!-- رصيد حالي -->
+    <div class="balance-card">
+      <div class="balance-icon">💰</div>
+      <div class="balance-label">رصيدك الحالي</div>
+      <div class="balance-value" id="pointsValueRewards">0</div>
+      <div class="balance-unit">نقطة</div>
+    </div>
+
+    <!-- كرت ابو 100 -->
+    <div class="reward-item">
+      <div class="ri-icon">📶</div>
+      <div class="ri-name">كرت ابو 100</div>
+      <div class="ri-pts-badge">💰 50 نقطة</div>
+      <button class="ri-action ri-btn-ok" id="ri-btn-50" onclick="redeemReward(50)">استبدال</button>
+    </div>
+
+    <!-- كرت ابو 200 -->
+    <div class="reward-item">
+      <div class="ri-icon">🚀</div>
+      <div class="ri-name">كرت ابو 200</div>
+      <div class="ri-pts-badge">💰 100 نقطة</div>
+      <button class="ri-action ri-btn-ok" id="ri-btn-100" onclick="redeemReward(100)">استبدال</button>
+    </div>
+
+    <!-- كرت VIP -->
+    <div class="reward-item">
+      <div class="ri-icon">👑</div>
+      <div class="ri-name">كرت VIP</div>
+      <div class="ri-pts-badge">💰 200 نقطة</div>
+      <button class="ri-action ri-btn-ok" id="ri-btn-200" onclick="redeemReward(200)">استبدال</button>
+    </div>
+  </div>
+
+  <!-- ==============================
+       سجل العمليات
+  ============================== -->
+  <div id="logsPage" class="page" style="display:none">
+    <div class="page-header">
+      <div class="page-title">⬅ سجل العمليات</div>
+      <div class="page-subtitle">تتبع جميع عمليات النقاط والمكافآت</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-ops" onclick="switchTab('ops')">سجل العمليات</button>
+      <button class="tab-btn" id="tab-rewards" onclick="switchTab('rewards')">🎁 المكافآت المستلمة</button>
+    </div>
+
+    <div id="logsList"></div>
+    <div id="rewardLogsList" style="display:none;"></div>
+  </div>
+
+  <!-- ==============================
+       معلومات الكروت
+  ============================== -->
+  <div id="cardsInfoPage" class="page" style="display:none">
+    <div class="page-header">
+      <div class="page-title">📋 معلومات الكروت</div>
+      <div class="page-subtitle">معرفة كل كرت كم يعطيك نقاط</div>
+    </div>
+    <div class="cards-list">
+      <div class="cards-list-header">انواع الكروت</div>
+      <div class="card-type-item">
+        <div>
+          <div class="ct-name">كرت ابو 100</div>
+          <div class="ct-pts">يعطيك نقاط بحسب الكرت</div>
+        </div>
+        <div class="ct-badge">2 نقطة</div>
+      </div>
+      <div class="card-type-item">
+        <div>
+          <div class="ct-name">كرت ابو 200</div>
+          <div class="ct-pts">يعطيك نقاط بحسب الكرت</div>
+        </div>
+        <div class="ct-badge">4 نقطة</div>
+      </div>
+      <div class="card-type-item">
+        <div>
+          <div class="ct-name">كرت ابو 300</div>
+          <div class="ct-pts">يعطيك نقاط بحسب الكرت</div>
+        </div>
+        <div class="ct-badge">6 نقطة</div>
+      </div>
+      <div class="card-type-item">
+        <div>
+          <div class="ct-name">كرت ابو 500</div>
+          <div class="ct-pts">يعطيك نقاط بحسب الكرت</div>
+        </div>
+        <div class="ct-badge">10 نقطة</div>
+      </div>
+      <div class="card-type-item">
+        <div>
+          <div class="ct-name">كرت ابو 1000</div>
+          <div class="ct-pts">يعطيك نقاط بحسب الكرت</div>
+        </div>
+        <div class="ct-badge">20 نقطة</div>
+      </div>
+      <div class="card-type-item">
+        <div>
+          <div class="ct-name">كرت ابو 3000</div>
+          <div class="ct-pts">يعطيك نقاط بحسب الكرت</div>
+        </div>
+        <div class="ct-badge">60 نقطة</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       حسابي
+  ============================== -->
+  <div id="accountPage" class="page" style="display:none">
+    <div class="page-header">
+      <div class="page-title">👤 حسابي</div>
+      <div class="page-subtitle">معلومات حسابك الشخصي</div>
+    </div>
+    <div class="account-card">
+      <div class="account-avatar">👤</div>
+      <div class="account-name" id="accName">—</div>
+      <div class="account-code" id="accCode" onclick="copyCode()">انقر للنسخ</div>
+    </div>
+    <div class="account-card">
+      <div class="account-row">
+        <span class="account-row-label">الاسم</span>
+        <span class="account-row-value" id="accNameRow">—</span>
+      </div>
+      <div class="account-row">
+        <span class="account-row-label">الكود</span>
+        <span class="account-row-value" id="accCodeRow">—</span>
+      </div>
+      <div class="account-row">
+        <span class="account-row-label">رصيد النقاط</span>
+        <span class="account-row-value" id="accPoints">0</span>
+      </div>
+      <div class="account-row">
+        <span class="account-row-label">حالة السلفة</span>
+        <span class="account-row-value" id="accLoan">لا يوجد</span>
+      </div>
+    </div>
+    <button class="btn btn-danger-ghost" onclick="logoutUser()">⎋ تسجيل الخروج</button>
+  </div>
+
+  <!-- ==============================
+       صفحة شحن كرت
+  ============================== -->
+  <div id="chargePage" class="page" style="display:none">
+    <div class="page-header">
+      <div class="page-title">💳 شحن كرت</div>
+      <div class="page-subtitle">حوّل المبلغ وارسل إشعاراً للتأكيد</div>
+    </div>
+
+    <!-- اختيار الخدمة -->
+    <div class="panel">
+      <div class="panel-label">اختر خدمة الدفع</div>
+      <div style="display:flex; gap:10px;">
+        <div id="svcJaib" class="svc-card active" onclick="selectService('jaib')">
+          <div style="font-size:28px;">🏦</div>
+          <div style="font-weight:900; font-size:14px; color:#e8c96d;">جيب</div>
+          <div style="font-size:11px; color:#7a8fa8; margin-top:2px;">Jaib</div>
+        </div>
+        <div id="svcJawali" class="svc-card" onclick="selectService('jawali')">
+          <div style="font-size:28px;">📱</div>
+          <div style="font-weight:900; font-size:14px; color:#e8c96d;">جوالي</div>
+          <div style="font-size:11px; color:#7a8fa8; margin-top:2px;">Jawali</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- معلومات التحويل -->
+    <div class="panel" id="payInfoBox">
+      <div class="panel-label">معلومات الحساب</div>
+      <div style="background:#1c3660; border-radius:12px; padding:14px 16px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:11px; color:#7a8fa8; margin-bottom:4px;" id="svcLabel">رقم جيب</div>
+          <div style="font-size:20px; font-weight:900; color:#fff; direction:ltr; letter-spacing:2px;" id="svcNumber">777 601 080</div>
+        </div>
+        <button onclick="copyPayNumber()" style="background:rgba(201,168,71,0.15); border:1px solid rgba(201,168,71,0.3); border-radius:10px; color:#e8c96d; font-family:'Cairo',sans-serif; font-size:12px; padding:8px 14px; cursor:pointer; width:auto; margin:0; box-shadow:none;">📋 نسخ</button>
+      </div>
+      <div style="font-size:12px; color:#7a8fa8; margin-top:8px; text-align:center;">حوّل المبلغ إلى الرقم أعلاه ثم أكمل النموذج</div>
+    </div>
+
+    <!-- اختيار المبلغ -->
+    <div class="panel">
+      <div class="panel-label">اختر فئة الكرت</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="amt-card" id="amt100" onclick="selectAmount(100)">
+          <div style="font-size:22px;">📶</div>
+          <div style="font-weight:900; color:#fff;">ابو 100</div>
+          <div style="font-size:12px; color:#e8c96d; margin-top:2px;">100 ريال</div>
+        </div>
+        <div class="amt-card" id="amt200" onclick="selectAmount(200)">
+          <div style="font-size:22px;">🚀</div>
+          <div style="font-weight:900; color:#fff;">ابو 200</div>
+          <div style="font-size:12px; color:#e8c96d; margin-top:2px;">200 ريال</div>
+        </div>
+        <div class="amt-card" id="amt300" onclick="selectAmount(300)">
+          <div style="font-size:22px;">⚡</div>
+          <div style="font-weight:900; color:#fff;">ابو 300</div>
+          <div style="font-size:12px; color:#e8c96d; margin-top:2px;">300 ريال</div>
+        </div>
+        <div class="amt-card" id="amt500" onclick="selectAmount(500)">
+          <div style="font-size:22px;">👑</div>
+          <div style="font-weight:900; color:#fff;">ابو 500</div>
+          <div style="font-size:12px; color:#e8c96d; margin-top:2px;">500 ريال</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- نموذج الإرسال -->
+    <div class="panel">
+      <div class="panel-label">تفاصيل التحويل</div>
+      <input id="chargePhone" placeholder="📞 رقم هاتفك (للتواصل)" type="tel" style="margin-bottom:10px;">
+      <input id="chargeTxnRef" placeholder="🔢 رقم العملية / المرجع (اختياري)">
+    </div>
+
+    <button class="btn btn-cream" id="chargeSubmitBtn" onclick="submitChargeRequest()">
+      📤 إرسال طلب الشحن
+    </button>
+
+    <!-- سجل الطلبات السابقة -->
+    <div class="panel" style="margin-top:6px;">
+      <div class="panel-label">طلباتي السابقة</div>
+      <div id="chargeHistory">
+        <div class="empty-state"><div class="es-icon">📋</div>لا توجد طلبات بعد</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#appWrapper -->
+
+<!-- ====== ONBOARDING TUTORIAL ====== -->
+<div id="tutorialOverlay" style="display:none; position:fixed; inset:0; background:rgba(5,12,30,0.92); z-index:5000; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#162d50; border:1px solid rgba(201,168,71,0.3); border-radius:24px; max-width:360px; width:100%; overflow:hidden; box-shadow:0 16px 48px rgba(0,0,0,0.6);">
+
+    <!-- شريط التقدم -->
+    <div style="height:4px; background:rgba(255,255,255,0.1);">
+      <div id="tutProgress" style="height:100%; background:linear-gradient(90deg,#c9a847,#e8c96d); border-radius:4px; transition:width 0.4s ease; width:25%;"></div>
+    </div>
+
+    <!-- محتوى الخطوات -->
+    <div id="tutSteps">
+
+      <!-- خطوة 1 -->
+      <div class="tut-step" id="tStep1" style="padding:28px 24px 20px; text-align:center;">
+        <div style="font-size:52px; margin-bottom:16px;">📡</div>
+        <div style="font-size:18px; font-weight:900; color:#e8c96d; margin-bottom:10px;">مرحباً بك في شبكة مزايا نت</div>
+        <div style="font-size:13px; color:#94a3b8; line-height:1.8;">
+          نظام نقاط الولاء الخاص بك!<br>
+          أضف كروت الإنترنت واجمع نقاطاً<br>
+          لتحصل على كروت مجانية 🎁
+        </div>
+      </div>
+
+      <!-- خطوة 2 -->
+      <div class="tut-step" id="tStep2" style="padding:28px 24px 20px; text-align:center; display:none;">
+        <div style="font-size:52px; margin-bottom:16px;">🗃️</div>
+        <div style="font-size:18px; font-weight:900; color:#e8c96d; margin-bottom:10px;">كيف تضيف نقاط؟</div>
+        <div style="background:rgba(255,255,255,0.05); border-radius:14px; padding:16px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:13px; color:#7a8fa8; margin-bottom:6px;">أدخل كود الكرت يدوياً</div>
+          <div style="background:#1c3660; border-radius:10px; padding:10px; font-size:15px; color:#fff; direction:ltr;">887545</div>
+        </div>
+        <div style="font-size:13px; color:#94a3b8; line-height:1.8;">
+          اكتب رقم الكرت واضغط<br>
+          <span style="color:#e8c96d;">+ إضافة نقاط</span>
+          وستُضاف النقاط فوراً ✅
+        </div>
+      </div>
+
+      <!-- خطوة 3 -->
+      <div class="tut-step" id="tStep3" style="padding:28px 24px 20px; text-align:center; display:none;">
+        <div style="font-size:52px; margin-bottom:16px;">🎁</div>
+        <div style="font-size:18px; font-weight:900; color:#e8c96d; margin-bottom:10px;">استبدل نقاطك بمكافآت</div>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+          <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border:1px solid rgba(255,255,255,0.08);">
+            <span style="font-size:13px; color:#fff; font-weight:700;">📶 كرت ابو 100</span>
+            <span style="background:#1c3660; border-radius:50px; padding:4px 12px; font-size:12px; color:#e8c96d;">50 نقطة</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border:1px solid rgba(255,255,255,0.08);">
+            <span style="font-size:13px; color:#fff; font-weight:700;">🚀 كرت ابو 200</span>
+            <span style="background:#1c3660; border-radius:50px; padding:4px 12px; font-size:12px; color:#e8c96d;">100 نقطة</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border:1px solid rgba(255,255,255,0.08);">
+            <span style="font-size:13px; color:#fff; font-weight:700;">👑 كرت VIP</span>
+            <span style="background:#1c3660; border-radius:50px; padding:4px 12px; font-size:12px; color:#e8c96d;">200 نقطة</span>
+          </div>
+        </div>
+        <div style="font-size:13px; color:#94a3b8;">اضغط على 🎁 المكافآت للاستبدال</div>
+      </div>
+
+      <!-- خطوة 4 -->
+      <div class="tut-step" id="tStep4" style="padding:28px 24px 20px; text-align:center; display:none;">
+        <div style="font-size:52px; margin-bottom:16px;">💰</div>
+        <div style="font-size:18px; font-weight:900; color:#e8c96d; margin-bottom:10px;">خدمة سلفني</div>
+        <div style="background:rgba(201,168,71,0.08); border:1px solid rgba(201,168,71,0.25); border-radius:14px; padding:16px; margin-bottom:12px;">
+          <div style="font-size:13px; color:#e8c96d; font-weight:700; margin-bottom:6px;">🎯 كيف تعمل السلفة؟</div>
+          <div style="font-size:12px; color:#94a3b8; line-height:1.9; text-align:right;">
+            ✅ تحتاج 30 نقطة أو أكثر<br>
+            ✅ احصل على كرت ابو 100 فوراً<br>
+            ✅ يُخصم الدين من كروتك القادمة<br>
+            ✅ سلفة واحدة في كل مرة
+          </div>
+        </div>
+        <div style="font-size:13px; color:#94a3b8;">جاهز؟ ابدأ باستخدام التطبيق الآن 🚀</div>
+      </div>
+
+    </div>
+
+    <!-- أزرار التنقل -->
+    <div style="padding:16px 24px 24px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <button onclick="tutSkip()" style="background:none; border:none; color:#7a8fa8; font-family:'Cairo',sans-serif; font-size:13px; font-weight:600; cursor:pointer; padding:8px 0; width:auto; margin:0; box-shadow:none;">تخطي</button>
+      <div id="tutDots" style="display:flex; gap:6px;">
+        <div class="tdot active" id="td1"></div>
+        <div class="tdot" id="td2"></div>
+        <div class="tdot" id="td3"></div>
+        <div class="tdot" id="td4"></div>
+      </div>
+      <button id="tutNextBtn" onclick="tutNext()" style="background:linear-gradient(135deg,#c9a847,#e8c96d); color:#0d1f3c; font-family:'Cairo',sans-serif; font-size:14px; font-weight:900; border:none; border-radius:50px; padding:10px 24px; cursor:pointer; width:auto; margin:0; box-shadow:0 4px 16px rgba(201,168,71,0.3);">التالي ◄</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== دليل الاستخدام OVERLAY ====== -->
+<div id="guideOverlay" style="display:none; position:fixed; inset:0; background:rgba(5,12,30,0.95); z-index:6000; overflow-y:auto; padding:0;">
+  <!-- رأس الدليل -->
+  <div style="position:sticky; top:0; z-index:10; background:linear-gradient(135deg,#0d1f3c 0%,#162d50 100%); border-bottom:1px solid rgba(201,168,71,0.3); padding:16px 20px; display:flex; align-items:center; justify-content:space-between;">
+    <div style="font-family:'Cairo',sans-serif; font-size:17px; font-weight:900; color:#e8c96d; display:flex; align-items:center; gap:8px;">
+      <span>📖</span> دليل الاستخدام
+    </div>
+    <button onclick="closeGuide()" style="background:rgba(201,168,71,0.15); border:1px solid rgba(201,168,71,0.3); color:#e8c96d; border-radius:50%; width:34px; height:34px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:'Cairo',sans-serif;">✕</button>
+  </div>
+
+  <!-- محتوى الدليل -->
+  <div style="max-width:480px; margin:0 auto; padding:20px 16px 40px;">
+
+    <!-- ==== القسم 1: التسجيل ==== -->
+    <div class="guide-section">
+      <div class="guide-section-header">
+        <span class="guide-section-icon">📝</span>
+        <div>
+          <div class="guide-section-title">كيف تُسجِّل؟</div>
+          <div class="guide-section-sub">إنشاء حساب جديد في دقيقة</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">١</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">اضغط على "إنشاء كود جديد"</div>
+          <div class="guide-step-desc">في شاشة تسجيل الدخول ابحث عن زر <strong>🎫 إنشاء كود جديد</strong> واضغط عليه</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">٢</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">أدخل اسمك وكلمة السر</div>
+          <div class="guide-step-desc">اكتب <strong>اسمك الكامل</strong> ثم اختر <strong>كلمة سر</strong> تتذكرها جيداً (لا تنساها!)</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">٣</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">احتفظ بالكود الخاص بك</div>
+          <div class="guide-step-desc">بعد الإنشاء ستحصل على <strong>كود رقمي مميز</strong> — احتفظ به! هو هويتك في التطبيق</div>
+        </div>
+      </div>
+
+      <div class="guide-tip">
+        💡 <strong>نصيحة:</strong> سجّل الكود وكلمة السر في مكان آمن مثل المفكرة أو صورة
+      </div>
+    </div>
+
+    <!-- ==== القسم 2: إضافة نقاط ==== -->
+    <div class="guide-section">
+      <div class="guide-section-header">
+        <span class="guide-section-icon">🗃️</span>
+        <div>
+          <div class="guide-section-title">كيف تضيف نقاطاً؟</div>
+          <div class="guide-section-sub">استفد من كل كرت إنترنت تشتريه</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">١</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">سجّل دخولك بكودك وكلمة السر</div>
+          <div class="guide-step-desc">أدخل <strong>كودك الرقمي</strong> وكلمة السر في شاشة تسجيل الدخول ثم اضغط دخول</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">٢</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">اضغط "+ إضافة نقاط"</div>
+          <div class="guide-step-desc">في الصفحة الرئيسية ستجد زر <strong>+ إضافة نقاط</strong> — اضغط عليه</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">٣</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">أدخل رقم كرت الإنترنت</div>
+          <div class="guide-step-desc">اكتب <strong>الرقم المكتوب على الكرت</strong> كاملاً كما هو، ثم اضغط تأكيد</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">٤</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">شاهد نقاطك تزيد 🎉</div>
+          <div class="guide-step-desc">سيُضاف رصيد النقاط تلقائياً. كلما اشتريت كروتاً أكثر، كلما جمعت نقاطاً أكثر!</div>
+        </div>
+      </div>
+
+      <div class="guide-info-box">
+        <div style="font-weight:700; color:#e8c96d; margin-bottom:8px;">🎁 جدول النقاط</div>
+        <div class="guide-points-row"><span>كرت 500 ريال</span><span class="guide-pts">10 نقاط</span></div>
+        <div class="guide-points-row"><span>كرت 1000 ريال</span><span class="guide-pts">20 نقاط</span></div>
+        <div class="guide-points-row"><span>كرت 2000 ريال</span><span class="guide-pts">40 نقاط</span></div>
+      </div>
+    </div>
+
+    <!-- ==== القسم 3: استعادة الكود ==== -->
+    <div class="guide-section">
+      <div class="guide-section-header">
+        <span class="guide-section-icon">🔑</span>
+        <div>
+          <div class="guide-section-title">كيف تستعيد كودك؟</div>
+          <div class="guide-section-sub">لو نسيت كودك، استعده بسهولة</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">١</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">اضغط على "نسيت الكود؟"</div>
+          <div class="guide-step-desc">في شاشة تسجيل الدخول اضغط على زر <strong>🔑 نسيت الكود؟</strong></div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">٢</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">أدخل اسمك وكلمة السر</div>
+          <div class="guide-step-desc">اكتب <strong>الاسم الكامل</strong> الذي سجّلت به + <strong>كلمة السر</strong> اللي اخترتها عند الإنشاء</div>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">٣</div>
+        <div class="guide-step-body">
+          <div class="guide-step-title">اضغط "استعادة"</div>
+          <div class="guide-step-desc">سيظهر لك <strong>كودك الرقمي</strong> مباشرة — انسخه وادخل به التطبيق</div>
+        </div>
+      </div>
+
+      <div class="guide-tip" style="background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3);">
+        ⚠️ <strong>تنبيه:</strong> بدون الاسم الصحيح + كلمة السر لا يمكن استعادة الكود — احتفظ بهما!
+      </div>
+    </div>
+
+    <!-- ==== زر إغلاق في الأسفل ==== -->
+    <button onclick="closeGuide()" style="width:100%; background:linear-gradient(135deg,#c9a847,#e8c96d); color:#0d1f3c; font-family:'Cairo',sans-serif; font-size:15px; font-weight:900; border:none; border-radius:14px; padding:14px; cursor:pointer; margin-top:8px; box-shadow:0 4px 20px rgba(201,168,71,0.3);">
+      ✅ فهمت، ابدأ الآن!
+    </button>
+
+  </div><!-- /max-width -->
+</div><!-- /guideOverlay -->
+
+<!-- ====== BOTTOM NAV ====== -->
+<div id="bottomNav">
+  <div class="bn-items">
+    <button class="bn-item active" id="bn-home" onclick="gotoPage('pointsPage')">
+      <span class="bn-icon">🏠</span>
+      <span class="bn-label">الرئيسية</span>
+    </button>
+    <button class="bn-item" id="bn-rewards" onclick="gotoPage('rewardsPage')">
+      <span class="bn-icon">🎁</span>
+      <span class="bn-label">المكافآت</span>
+    </button>
+    <button class="bn-item" id="bn-logs" onclick="gotoPage('logsPage')">
+      <span class="bn-icon">🕐</span>
+      <span class="bn-label">السجل</span>
+    </button>
+    <button class="bn-item" id="bn-charge" onclick="gotoPage('chargePage')">
+      <span class="bn-icon">💳</span>
+      <span class="bn-label">شحن</span>
+    </button>
+    <button class="bn-item" id="bn-account" onclick="gotoPage('accountPage')">
+      <span class="bn-icon">👤</span>
+      <span class="bn-label">حسابي</span>
+    </button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+// ====== إصلاح فوري: app.js يُشغّل showPage قديم قبل أن يعمل override ======
+// نُعيد إخفاء كل الصفحات فوراً ونُظهر الصفحة الصحيحة فقط
+(
+function fixInitialState() {
+  document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+  const hasUser = (typeof currentUser !== 'undefined') && currentUser;
+  if (hasUser) {
+    const pp = document.getElementById('pointsPage');
+    if (pp) pp.style.display = 'flex';
+    const hdr = document.getElementById('appHeader');
+    if (hdr) hdr.style.display = 'flex';
+    const nav = document.getElementById('bottomNav');
+    if (nav) nav.style.display = 'flex';
+  } else {
+    const lg = document.getElementById('login');
+    if (lg) lg.style.display = 'flex';
+  }
+})();
+
+// ====== UI HELPERS (override original showPage) ======
+const AUTH_PAGES = ['login','create','recover'];
+
+function gotoPage(id) {
+  // تشغيل التعليم عند أول وصول للصفحة الرئيسية
+  if (id === 'pointsPage' && !localStorage.getItem('tut_seen')) {
+    setTimeout(tutShow, 600);
+  }
+  // إخفاء جميع الصفحات بـ inline style لضمان الإخفاء الكامل
+  document.querySelectorAll('.page').forEach(p => {
+    p.style.display = 'none';
+    p.classList.remove('active');
+  });
+  // إظهار الصفحة المطلوبة فقط
+  const pg = document.getElementById(id);
+  if (pg) {
+    pg.style.display = 'flex';
+    pg.classList.add('active');
+  }
+
+  const isAuth = AUTH_PAGES.includes(id);
+  document.getElementById('appHeader').style.display = isAuth ? 'none' : 'flex';
+  const nav = document.getElementById('bottomNav');
+  nav.style.display = isAuth ? 'none' : 'flex';
+  nav.classList.toggle('visible', !isAuth);
+
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+  const map = { pointsPage:'bn-home', rewardsPage:'bn-rewards', logsPage:'bn-logs', chargePage:'bn-charge', accountPage:'bn-account' };
+  if (map[id]) document.getElementById(map[id])?.classList.add('active');
+
+  if (id === 'logsPage')   renderLogs();
+  if (id === 'chargePage') loadChargeHistory();
+  if (id === 'rewardsPage') updateRewardButtons();
+  if (id === 'accountPage') updateAccountPage();
+
+  window.scrollTo(0, 0);
+}
+
+// Override the original showPage used by app.js
+function showPage(id) { gotoPage(id); }
+
+// ====== DRAWER ======
+function openDrawer() {
+  document.getElementById('drawerPanel').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawerPanel').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+}
+
+// ====== EXTRA UI UPDATES ======
+const _origUpdateUI = window.updateUI;
+window.updateUI = function() {
+  _origUpdateUI && _origUpdateUI();
+  if (!currentUser) return;
+  // drawer
+  document.getElementById('drawerName').textContent = currentUser.name || '—';
+  document.getElementById('drawerCode').textContent = 'الكود: ' + (currentUser.code || '—');
+  // reward buttons
+  updateRewardButtons();
+  // account
+  updateAccountPage();
+  // إعادة رسم السجل بالتصميم الصحيح (يتجاوز <li> من app.js الأصلي)
+  renderLogs();
+};
+
+function updateRewardButtons() {
+  if (!currentUser) return;
+  const pts = currentUser.points || 0;
+  [[50,50],[100,100],[200,200]].forEach(([cost, id]) => {
+    const btn = document.getElementById('ri-btn-' + id);
+    if (!btn) return;
+    if (pts >= cost) {
+      btn.className = 'ri-action ri-btn-ok';
+      btn.textContent = 'استبدال';
+      btn.onclick = () => redeemReward(cost);
+      btn.style.cursor = 'pointer';
+    } else {
+      btn.className = 'ri-action ri-btn-need';
+      btn.textContent = '🔒 تحتاج ' + (cost - pts) + ' نقطة إضافية';
+      btn.onclick = null;
+    }
+  });
+}
+
+function updateAccountPage() {
+  if (!currentUser) return;
+  document.getElementById('accName').textContent = currentUser.name || '—';
+  document.getElementById('accNameRow').textContent = currentUser.name || '—';
+  document.getElementById('accCode').textContent = 'الكود: ' + (currentUser.code || '—');
+  document.getElementById('accCodeRow').textContent = currentUser.code || '—';
+  document.getElementById('accPoints').textContent = (currentUser.points || 0) + ' نقطة';
+  const loan = currentUser.loan;
+  document.getElementById('accLoan').textContent =
+    (loan && loan.remaining > 0) ? loan.remaining + ' نقطة متبقية' : 'لا يوجد';
+}
+
+// ====== LOGS ======
+let activeTab = 'ops';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-ops').classList.toggle('active', tab === 'ops');
+  document.getElementById('tab-rewards').classList.toggle('active', tab === 'rewards');
+  document.getElementById('logsList').style.display = tab === 'ops' ? 'block' : 'none';
+  document.getElementById('rewardLogsList').style.display = tab === 'rewards' ? 'block' : 'none';
+  renderLogs();
+}
+
+function renderLogs() {
+  if (!currentUser) return;
+  const allLogs = (currentUser.logs || []).slice().reverse();
+  const container      = document.getElementById('logsList');
+  const rewardContainer = document.getElementById('rewardLogsList');
+  if (!container || !rewardContainer) return;
+
+  // تصنيف السجلات
+  const rewardKeywords = ['مكافأة','reward','سلفة انتهت','استبدال'];
+  const opsLogs    = allLogs.filter(l => !rewardKeywords.some(k => l.includes(k)));
+  const rewardLogs = allLogs.filter(l =>  rewardKeywords.some(k => l.includes(k)));
+
+  function buildItems(arr, el) {
+    if (arr.length === 0) {
+      el.innerHTML = '<div class="empty-state"><div class="es-icon">📭</div>لا توجد عمليات بعد</div>';
+      return;
+    }
+    el.innerHTML = arr.map(log => {
+      // استخراج عدد النقاط من أي صيغة (+10 أو 10 نقطة)
+      const ptsMatch = log.match(/\+(\d+)/) || log.match(/(\d+)\s*نقط/);
+      const pts = ptsMatch ? ptsMatch[1] : '';
+
+      // تحديد أيقونة ونوع العملية
+      let icon = 'ℹ️', color = '';
+      if (log.includes('سلفة') || log.includes('💰')) { icon = '💰'; color = 'color:#f59e0b'; }
+      else if (log.includes('مكافأة') || log.includes('🎁'))  { icon = '🎁'; }
+      else if (log.includes('🗃') || log.match(/\d{6,}/))       { icon = '🗃️'; }
+
+      // تنظيف النص من الإيموجي المكررة
+      const cleanLog = log.replace(/^[🗃💰🎁ℹ️\s]+/, '').trim();
+
+      return `
+        <div class="log-item">
+          <div class="log-info">
+            <div class="log-title" style="${color}">${icon} عملية</div>
+            <div class="log-desc">${cleanLog}</div>
+          </div>
+          ${pts ? `<div class="log-pts">🪙 ${pts} نقطة</div>` : ''}
+        </div>`;
+    }).join('');
+  }
+
+  buildItems(opsLogs, container);
+  buildItems(rewardLogs, rewardContainer);
+}
+
+// ====== TOAST (إشعار سريع) ======
+function showToast(msg) {
+  const old = document.getElementById('mainToast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.id = 'mainToast';
+  t.style.cssText = `position:fixed;top:80px;left:50%;transform:translateX(-50%);
+    background:#162d50;border:1px solid rgba(201,168,71,0.35);color:#e8c96d;
+    border-radius:14px;padding:11px 22px;font-size:13px;z-index:6000;
+    box-shadow:0 8px 24px rgba(0,0,0,0.6);max-width:290px;text-align:center;
+    line-height:1.6;direction:rtl;animation:fadeSlideUp 0.3s ease;font-family:'Cairo',sans-serif;`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { if (t.parentElement) t.remove(); }, 3000);
+}
+
+// ====== CHARGE REQUEST ======
+const PAYMENT_ACCOUNTS = {
+  jaib:   { label: 'رقم جيب',   number: '777 601 080' },
+  jawali: { label: 'رقم جوالي', number: '773 654 321' }
+};
+let selectedService = 'jaib';
+let selectedAmount  = null;
+
+function selectService(svc) {
+  selectedService = svc;
+  document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('svc' + (svc === 'jaib' ? 'Jaib' : 'Jawali')).classList.add('active');
+  const info = PAYMENT_ACCOUNTS[svc];
+  document.getElementById('svcLabel').textContent  = info.label;
+  document.getElementById('svcNumber').textContent = info.number;
+}
+
+function selectAmount(val) {
+  selectedAmount = val;
+  [100, 200, 300, 500].forEach(a => {
+    const el = document.getElementById('amt' + a);
+    if (el) el.classList.toggle('active', a === val);
+  });
+}
+
+function copyPayNumber() {
+  const num = document.getElementById('svcNumber').textContent.replace(/\s/g, '');
+  navigator.clipboard.writeText(num).then(() => showToast('✅ تم نسخ الرقم'));
+}
+
+function loadChargeHistory() {
+  if (!currentUser) return;
+  const el = document.getElementById('chargeHistory');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;color:#7a8fa8;font-size:13px;padding:10px;">⏳ جاري التحميل...</div>';
+
+  fetch(API + '/chargeRequest/' + currentUser.code)
+    .then(r => r.json())
+    .then(data => {
+      if (!data.requests || data.requests.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="es-icon">📋</div>لا توجد طلبات بعد</div>';
+        return;
+      }
+      const svcMap = { jaib: '🏦 جيب', jawali: '📱 جوالي' };
+      const statusMap = {
+        pending:  { label: '⏳ قيد المراجعة', cls: 'badge-pending' },
+        approved: { label: '✅ تمت الموافقة', cls: 'badge-approved' },
+        rejected: { label: '❌ مرفوض',        cls: 'badge-rejected' }
+      };
+      el.innerHTML = data.requests.map(r => {
+        const st = statusMap[r.status] || statusMap.pending;
+        const date = new Date(r.created_at).toLocaleDateString('ar-YE');
+        return `<div class="charge-req-item">
+          <div>
+            <div style="font-weight:700;font-size:13px;color:#fff;">${svcMap[r.service] || r.service} — ${Number(r.amount).toLocaleString()} ريال</div>
+            <div style="font-size:11px;color:#7a8fa8;margin-top:3px;">${date}${r.note ? ' · ' + r.note : ''}</div>
+          </div>
+          <span class="charge-req-badge ${st.cls}">${st.label}</span>
+        </div>`;
+      }).join('');
+    })
+    .catch(() => { el.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div>تعذر التحميل</div>'; });
+}
+
+function submitChargeRequest() {
+  if (!currentUser) return;
+  const phone  = document.getElementById('chargePhone').value.trim();
+  const txnRef = document.getElementById('chargeTxnRef').value.trim();
+
+  if (!phone)           { showToast('⚠️ أدخل رقم هاتفك للتواصل');  return; }
+  if (!selectedAmount)  { showToast('⚠️ اختر فئة الكرت أولاً');      return; }
+
+  const btn = document.getElementById('chargeSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري الإرسال...';
+
+  fetch(API + '/chargeRequest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userCode: currentUser.code,
+      userName: currentUser.name,
+      phone, amount: selectedAmount,
+      service: selectedService,
+      txnRef: txnRef || undefined
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.error) { showToast(data.error); return; }
+    showToast(data.message || '✅ تم إرسال الطلب');
+    document.getElementById('chargePhone').value  = '';
+    document.getElementById('chargeTxnRef').value = '';
+    selectedAmount = null;
+    [100, 200, 300, 500].forEach(a => {
+      const el = document.getElementById('amt' + a);
+      if (el) el.classList.remove('active');
+    });
+    loadChargeHistory();
+  })
+  .catch(() => showToast('❌ خطأ في الاتصال'))
+  .finally(() => {
+    btn.disabled = false;
+    btn.textContent = '📤 إرسال طلب الشحن';
+  });
+}
+
+// ====== TUTORIAL / ONBOARDING ======
+let tutCurrentStep = 1;
+const TOTAL_STEPS = 4;
+
+function tutShow() {
+  const ov = document.getElementById('tutorialOverlay');
+  ov.style.display = 'flex';
+  tutCurrentStep = 1;
+  tutRender();
+}
+
+function tutSkip() {
+  document.getElementById('tutorialOverlay').style.display = 'none';
+  localStorage.setItem('tut_seen', '1');
+}
+
+function tutNext() {
+  if (tutCurrentStep < TOTAL_STEPS) {
+    tutCurrentStep++;
+    tutRender();
+  } else {
+    tutSkip();
+  }
+}
+
+function tutRender() {
+  // إخفاء كل الخطوات
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const el = document.getElementById('tStep' + i);
+    if (el) el.style.display = 'none';
+    const dot = document.getElementById('td' + i);
+    if (dot) dot.classList.remove('active');
+  }
+  // إظهار الخطوة الحالية
+  const cur = document.getElementById('tStep' + tutCurrentStep);
+  if (cur) cur.style.display = 'block';
+  const dot = document.getElementById('td' + tutCurrentStep);
+  if (dot) dot.classList.add('active');
+  // شريط التقدم
+  document.getElementById('tutProgress').style.width = ((tutCurrentStep / TOTAL_STEPS) * 100) + '%';
+  // زر التالي/إنهاء
+  document.getElementById('tutNextBtn').textContent = tutCurrentStep === TOTAL_STEPS ? '✓ ابدأ الآن' : 'التالي ◄';
+}
+
+function showHelp(msg) {
+  const old = document.getElementById('helpToast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.id = 'helpToast';
+  t.style.cssText = `position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+    background:#162d50;border:1px solid rgba(201,168,71,0.4);color:#e8c96d;
+    border-radius:14px;padding:12px 20px;font-size:13px;z-index:4000;
+    box-shadow:0 8px 24px rgba(0,0,0,0.5);max-width:300px;text-align:center;
+    line-height:1.7;direction:rtl;animation:fadeSlideUp 0.3s ease;`;
+  t.innerHTML = msg + `<div onclick="this.parentElement.remove()" style="margin-top:8px;color:#7a8fa8;font-size:12px;cursor:pointer;">✕ إغلاق</div>`;
+  document.body.appendChild(t);
+  setTimeout(() => { if (t.parentElement) t.remove(); }, 5000);
+}
+
+// إضافة أنيميشن للـ toast
+if (!document.getElementById('toastStyle')) {
+  const s = document.createElement('style');
+  s.id = 'toastStyle';
+  s.textContent = `@keyframes fadeSlideUp {from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`;
+  document.head.appendChild(s);
+}
+
+// ====== دليل الاستخدام ======
+function showGuide() {
+  const ov = document.getElementById('guideOverlay');
+  ov.style.display = 'block';
+  ov.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closeGuide() {
+  document.getElementById('guideOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// ====== LOAN STATUS TEXT ======
+const _origUpdateUILoan = window.updateUI;
+</script>
+</body>
+</html>

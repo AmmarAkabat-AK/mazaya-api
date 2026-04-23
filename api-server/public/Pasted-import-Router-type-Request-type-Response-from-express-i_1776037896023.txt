@@ -1,0 +1,88 @@
+import { Router, type Request, type Response } from "express";
+import { RouterOSClient } from "routeros-client";
+import admin from "../lib/firebase";
+import { getDb } from "../lib/firebase";
+import { logger } from "../lib/logger";
+
+const router = Router();
+
+router.post("/addCard", async (req: Request, res: Response) => {
+  const { userCode, cardNumber } = req.body;
+
+  if (!userCode || !cardNumber) {
+    res.json({ error: "❌ بيانات ناقصة" });
+    return;
+  }
+
+  try {
+    const db = getDb();
+
+    const usedRef = db.collection("usedCards").doc(cardNumber);
+    const usedDoc = await usedRef.get();
+
+    if (usedDoc.exists) {
+      res.json({ error: "❌ الكرت مستخدم مسبقاً" });
+      return;
+    }
+
+    const mikroHost = process.env["MIKROTIK_HOST"] || "192.168.88.1";
+    const mikroUser = process.env["MIKROTIK_USER"] || "admin";
+    const mikroPassword = process.env["MIKROTIK_PASSWORD"] || "123456";
+
+    const client = new RouterOSClient({
+      host: mikroHost,
+      user: mikroUser,
+      password: mikroPassword,
+    });
+
+    const conn = await client.connect();
+
+    const users = await conn
+      .menu("/ip/hotspot/user")
+      .where({ name: cardNumber })
+      .get();
+
+    if (users.length === 0) {
+      res.json({ error: "❌ الكرت غير موجود" });
+      return;
+    }
+
+    const pointsToAdd = 10;
+
+    const userRef = db.collection("users").doc(userCode);
+    const userDoc = await userRef.get();
+
+    const currentPoints = userDoc.exists ? userDoc.data()?.points || 0 : 0;
+    const newPoints = currentPoints + pointsToAdd;
+
+    if (userDoc.exists) {
+      await userRef.update({
+        points: newPoints,
+        logs: admin.firestore.FieldValue.arrayUnion(
+          `💳 ${cardNumber} +${pointsToAdd}`,
+        ),
+      });
+    } else {
+      await userRef.set({
+        points: newPoints,
+        logs: [`💳 ${cardNumber} +${pointsToAdd}`],
+      });
+    }
+
+    await usedRef.set({
+      usedBy: userCode,
+      date: new Date(),
+    });
+
+    res.json({
+      success: true,
+      newPoints,
+      pointsAdded: pointsToAdd,
+    });
+  } catch (e) {
+    logger.error({ err: e }, "Error in /addCard");
+    res.json({ error: "❌ خطأ في السيرفر" });
+  }
+});
+
+export default router;
