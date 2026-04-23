@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node ./build.mjs",
-    "start": "node --enable-source-maps ./dist/index.mjs",
+    "build": "node build.mjs",
+    "start": "node dist/index.mjs",
     "dev": "npm run build && npm run start",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
